@@ -143,7 +143,7 @@ func (app *application) saveData(data interface{}, filename string) error {
 }
 
 func (app *application) loadData() error {
-	file, err := os.Open(FILE_EVENTS)
+	file, err := os.OpenFile(FILE_EVENTS, os.O_RDWR|os.O_CREATE, 0666)
 	if err != nil {
 		return err
 	}
@@ -152,11 +152,11 @@ func (app *application) loadData() error {
 
 	decoder := gob.NewDecoder(file)
 	err = decoder.Decode(&app.EventsByHash)
-	if err != nil {
+	if err != nil && err != io.EOF {
 		return err
 	}
 
-	file, err = os.Open(FILE_USERS)
+	file, err = os.OpenFile(FILE_USERS, os.O_RDWR|os.O_CREATE, 0666)
 	if err != nil {
 		return err
 	}
@@ -165,7 +165,7 @@ func (app *application) loadData() error {
 
 	decoder = gob.NewDecoder(file)
 	err = decoder.Decode(&app.UsersByEmail)
-	if err != nil {
+	if err != nil && err != io.EOF {
 		return err
 	}
 
