@@ -43,6 +43,12 @@ func (app *application) getEventHandler(w http.ResponseWriter, r *http.Request) 
 		app.notFoundResponse(w, r)
 		return
 	}
+
+	if len(hash) < EVENT_HASH_LENGTH {
+		app.notFoundResponse(w, r)
+		return
+	}
+
 	// Remove control characters etc as these are lost on the storing in file.
 	hash = hash[0:EVENT_HASH_LENGTH]
 	if event, ok := app.EventsByHash[hash]; ok {
