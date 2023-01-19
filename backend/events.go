@@ -74,6 +74,7 @@ func (app *application) createAttendeeHandler(w http.ResponseWriter, r *http.Req
 		Email string    `json:"email"`
 		Name  string    `json:"name"`
 		Date  time.Time `json:"date"`
+		Hash  string    `json:"hash"`
 	}
 
 	err = app.readJSON(w, r, &input)

@@ -7,20 +7,21 @@ import (
 
 const EVENT_HASH_LENGTH = 10
 
+type Email string
 type User struct {
-	Name  string
-	Email string
+	Name  string `json:"name"`
+	Email string `json:"email"`
 }
 
 type EventDate struct {
-	Attendees []User
+	Attendees []User `json:"attendees"`
 }
 
 type Event struct {
-	Hash        string
-	Title       string
-	Description string
-	Dates       map[time.Time]EventDate
+	Hash        string                  `json:"hash"`
+	Title       string                  `json:"title"`
+	Description string                  `json:"description"`
+	Dates       map[time.Time]EventDate `json:"dates"`
 }
 
 func NewEvent() *Event {
