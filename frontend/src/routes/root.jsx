@@ -7,12 +7,12 @@ const defaultUser = {
   email: "",
 };
 
-const saveUser = (user) => {
+export const saveUser = (user) => {
   localStorage.setItem("user", JSON.stringify(user));
   return;
 };
 
-const loadUser = () => {
+export const loadUser = () => {
   const user = localStorage.getItem("user");
   return user === null ? defaultUser : JSON.parse(user);
 };
@@ -25,7 +25,12 @@ export async function  createEventAction({ request, params }) {
   console.log('event', event);
   const response = await createEvent(event);
   console.log('response', response)
-  return redirect(`/event/${response.Hash}`);
+  if (response !== undefined) {
+    return redirect(`/event/${response.hash}`);
+  } else {
+    alert("Error creating event");
+    return false
+  }
 }
 
 
