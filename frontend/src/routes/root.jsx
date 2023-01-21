@@ -40,7 +40,7 @@ const renderSignup = (name, email, setName, setEmail, saveUser, setAccountCreate
   const emptyName = name.length > 0 ? false : true;
   const emptyEmail = email.length > 0 ? false : true;
   return (
-    <div>
+    <section id="yourDetails">
       <h2>Your Details</h2>
       <form>
           <label className="block">
@@ -82,14 +82,14 @@ const renderSignup = (name, email, setName, setEmail, saveUser, setAccountCreate
             Save
           </button>
         </form>
-      </div>
+      </section>
   )
 }
 
 const renderCreateEvent = (title, description, setTitle, setDescription) => {
   const emptyTitle = title.length > 0 ? false : true;
   return (
-    <div>
+    <section id="createEvent">
       <h2>Create an Event</h2>
       <Form method="post">
         <label className="block">
@@ -123,7 +123,7 @@ const renderCreateEvent = (title, description, setTitle, setDescription) => {
           Create Event
         </button>
       </Form>
-    </div>
+    </section>
   );
 }
 
@@ -141,13 +141,17 @@ function App() {
   console.log('title :>> ', title);
   console.log('name.length :>> ', name.length);
   return (
-    <div className="container">
-      <header className="">
-        <h1>Goodle!</h1>
-        <p>Welcome {user.name}</p>
+    <>
+      <header className="container">
+        <hgroup>
+          <h1>Goodle!</h1>
+          <p>Welcome {user.name}</p>
+        </hgroup>
       </header>  
+      <main className="container">
       {!accountCreated ? renderSignup(name, email, setName, setEmail, saveUser, setAccountCreated) : renderCreateEvent(title, description, setTitle, setDescription)}
-    </div>
+      </main>
+    </>
   );
 }
 

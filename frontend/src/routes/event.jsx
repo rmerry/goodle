@@ -104,93 +104,108 @@ export default function Event() {
   console.log('attendees', attendees);
 
   return (
-    <div>
-      <Link to={`/`}>Home</Link>
-      <h1>Event Details</h1>
-      <h2>Title: {event.title}</h2>
-      <p>
-        <strong>Description: </strong>
-        {event.description}
-      </p>
-      <h2>Availability</h2>
-      <table>
-        <thead>
-          <tr>{renderHeader(user, attendees)}</tr>
-        </thead>
-        <tbody>
-          {dates.map((date) => {
-            const year = date.getFullYear();
-            let month = date.getMonth() + 1;
+      <>
+        <header className="container">
+          <hgroup>
+            <h1>Event: {event.title}</h1>
+          </hgroup>
+          <nav>
+          <ul>
+            <li><Link to={`/`}>Home</Link></li>
+          </ul>
+        </nav>
+        </header>
+        
+        
+        <main className="container">
+          <section id="eventDescription">
+            <p>
+              <strong>Description: </strong>
+              {event.description}
+            </p>
+          </section>
+          <section id="availability">
+            <h2>Availability</h2>
+            <figure>
+              <table>
+                <thead>
+                  <tr>{renderHeader(user, attendees)}</tr>
+                </thead>
+                <tbody>
+                  {dates.map((date) => {
+                    const year = date.getFullYear();
+                    let month = date.getMonth() + 1;
 
-            let todaysDate = date.getDate();
-            if( month < 10){
-              month = "0" + month.toString();
-            }
-            if (todaysDate < 10) {
-              todaysDate = "0" + todaysDate.toString();
-            }
+                    let todaysDate = date.getDate();
+                    if( month < 10){
+                      month = "0" + month.toString();
+                    }
+                    if (todaysDate < 10) {
+                      todaysDate = "0" + todaysDate.toString();
+                    }
 
-            // See if checked
-            let checked = false;
-            const dateAttendees = event.dates[`${year}-${month}-${todaysDate}T00:00:00Z`];
-            if (dateAttendees !== undefined) {
-              const { email } = user;
-              for (const a of dateAttendees.attendees) {
-                console.log("a", a);
-                if (email === a.email) {
-                  checked = true;
-                }
-              }
-            }
+                    // See if checked
+                    let checked = false;
+                    const dateAttendees = event.dates[`${year}-${month}-${todaysDate}T00:00:00Z`];
+                    if (dateAttendees !== undefined) {
+                      const { email } = user;
+                      for (const a of dateAttendees.attendees) {
+                        console.log("a", a);
+                        if (email === a.email) {
+                          checked = true;
+                        }
+                      }
+                    }
 
-            return (
-              <tr key={date}>
-                <td>
-                  {days[date.getDay()]} {date.getDate()}/{date.getMonth() + 1}/
-                  {date.getFullYear()}
-                </td>
-                <td>
-                  <input
-                    type="checkbox"
-                    value={`${year}-${month}-${todaysDate}T00:00:00.000Z`}
-                    onChange={(e) => {
-                      const checked = e.target.checked
-                      checked
-                        ? 
-                          add({
-                            hash: event.hash,
-                            ...user,
-                            date: e.target.value,
-                          }).then((newEvent) => {
-                            console.log('newEvent :>> ', newEvent);
-                            if (newEvent !== false) {
-                              setEvent(newEvent);
-                            }
-                          })
-                        : removeAttendee({
-                          hash: event.hash,
-                          ...user,
-                          date: e.target.value,
-                        }).then((newEvent) => {
-                          console.log('newEvent :>> ', newEvent);
-                          if (newEvent !== false) {
-                            setEvent(newEvent);
-                          }
-                        });
-                    }}
-                    checked={checked}
-                  />
-                </td>
-                {renderAttendees(
-                  user,
-                  attendees,
-                  event.dates[`${year}-${month}-${todaysDate}T00:00:00Z`]
-                )}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
+                    return (
+                      <tr key={date}>
+                        <td>
+                          {days[date.getDay()]} {date.getDate()}/{date.getMonth() + 1}/
+                          {date.getFullYear()}
+                        </td>
+                        <td>
+                          <input
+                            type="checkbox"
+                            value={`${year}-${month}-${todaysDate}T00:00:00.000Z`}
+                            onChange={(e) => {
+                              const checked = e.target.checked
+                              checked
+                                ? 
+                                  add({
+                                    hash: event.hash,
+                                    ...user,
+                                    date: e.target.value,
+                                  }).then((newEvent) => {
+                                    if (newEvent !== false) {
+                                      setEvent(newEvent);
+                                    }
+                                  })
+                                : removeAttendee({
+                                  hash: event.hash,
+                                  ...user,
+                                  date: e.target.value,
+                                }).then((newEvent) => {
+                                  if (newEvent !== false) {
+                                    setEvent(newEvent);
+                                  }
+                                });
+                            }}
+                            checked={checked}
+                          />
+                        </td>
+                        {renderAttendees(
+                          user,
+                          attendees,
+                          event.dates[`${year}-${month}-${todaysDate}T00:00:00Z`]
+                        )}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </figure>
+          </section>
+        </main>
+      </>
   );
 }
