@@ -14,7 +14,7 @@ export const getEvent = async (eventId) => {
     });
 };
 
-export const createEvent = async (event)=> {
+export const createEvent = async (event) => {
  console.log("event posting", event);
  const requestOptions = {
    method: "POST",
@@ -32,4 +32,25 @@ export const createEvent = async (event)=> {
    .catch((error) => {
     console.log('error', error);
    });
+}
+
+export const addAttendee = async (data) => {
+  console.log('data', data);
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  };
+
+  return fetch(`${API_URL}/v1/event/${data.hash}/attendee`, requestOptions)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("data", data);
+      const { event } = data;
+      return event;
+      // this.setState({ postId: data.id });
+    })
+    .catch((error) => {
+      console.log("error", error);
+    });
 }
