@@ -4,18 +4,18 @@ import {getEvent, addAttendee, removeAttendee} from '../actions/event';
 import { loadUser } from "./root";
 
   const days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
+    "Sun",
+    "Mon",
+    "Tues",
+    "Weds",
+    "Thurs",
+    "Fri",
+    "Sat",
+    "Sun",
   ];
 
 export async function loader({ params }) {
-  console.log('params :>> ', params);
+
   const event = getEvent(params.eventId);
   console.log('loader event', event);
   return event;
@@ -29,50 +29,125 @@ export async function remove(data) {
   return await removeAttendee(data);
 }
 
-const renderHeader = (user, attendees) => {
-  let headers = [<th key="date">Date</th>, <th key="me">Me</th>];
-  for (const [, attendee] of Object.entries(attendees)) {
-    if (user.email === attendee.email){
-      continue;
-    }
-    headers.push(<th key={attendee.email}>{attendee.name}</th>)
-  }
-  return headers;
+const renderHeader = (dates) => {
+  const headers = dates.map((date) => {
+    const month = date.getMonth() + 1;
+    return(<th key={date}>{days[date.getDay()]}<br />{date.getDate()}/{month}</th>);
+  });
+  return [<th key="attendees">Attendees</th>, ...headers];
 }
 
-const renderAttendees = (user, allAttendees, dateAttendees ) => {
+const renderAttendeeRows = (user, allAttendees, dates, event, setEvent) => {
+  const rows = [];
 
-  const columns = [];
-  for (const [email, ] of Object.entries(allAttendees)) { 
+  for (const [email, attendee ] of Object.entries(allAttendees)) { 
     if (user.email === email){
       continue;
     }
-    let found = false;
+    const {name} = attendee;
+    
+    const attendeeDates = dates.map((date) => {
+      let found = false;
+      const year = date.getFullYear();
+      let month = date.getMonth() + 1;
+
+      let theDate = date.getDate();
+      if( month < 10){
+        month = "0" + month.toString();
+      }
+      if (theDate < 10) {
+        theDate = "0" + theDate.toString();
+      }
+
+      // See if checked for the attendee
+      const theDateServerFmt = `${year}-${month}-${theDate}T00:00:00Z`;
+      const dateAttendees = event.dates[theDateServerFmt];
+      if (dateAttendees !== undefined) {
+        for (const a of dateAttendees.attendees) {
+          if (email === a.email) {
+            found = true;
+          }
+        }
+      }
+
+      if(found) {
+        return(
+          <td key={`${name}-${date}`}>
+            <img
+              src="/icons/checkmark-64.png"
+              alt="tick"
+              width="32"
+            />
+          </td>
+        );
+      } else {
+        return (<td></td>);
+      }
+    });
+
+    rows.push(<tr key={email}>{[<td key={attendee}>{name}</td>, ...attendeeDates]}</tr>)
+  }
+
+  // Now add the user row
+  const userDates = dates.map((date) => {
+    const year = date.getFullYear();
+    let month = date.getMonth() + 1;
+
+    let theDate = date.getDate();
+    if( month < 10){
+      month = "0" + month.toString();
+    }
+    if (theDate < 10) {
+      theDate = "0" + theDate.toString();
+    }
+
+    // See if checked
+    let checked = false;
+    const dateAttendees = event.dates[`${year}-${month}-${theDate}T00:00:00Z`];
     if (dateAttendees !== undefined) {
+      const { email } = user;
       for (const a of dateAttendees.attendees) {
         if (email === a.email) {
-          found = true;
+          checked = true;
         }
       }
     }
-
-    if(found) {
-      columns.push(
-        <td>
-          <img
-            src="/icons/checkmark-64.png"
-            alt="tick"
-            width="32"
-          />
-        </td>
-      );
-    } else {
-      columns.push(<td></td>);
-    }
-
-    return columns;
-  }
-};
+    return (
+      <td key={`${user.email}-${date}`}>
+        <input
+          type="checkbox"
+          value={`${year}-${month}-${theDate}T00:00:00.000Z`}
+          onChange={(e) => {
+            const checked = e.target.checked
+            checked
+              ? 
+                add({
+                  hash: event.hash,
+                  ...user,
+                  date: e.target.value,
+                }).then((newEvent) => {
+                  if (newEvent !== false) {
+                    setEvent(newEvent);
+                  }
+                })
+              : removeAttendee({
+                hash: event.hash,
+                ...user,
+                date: e.target.value,
+              }).then((newEvent) => {
+                if (newEvent !== false) {
+                  setEvent(newEvent);
+                }
+              });
+          }}
+          checked={checked}
+        />
+      </td>
+    );
+  })
+  rows.push(<tr key={user.email}>{[<td key={user}>{user.name}</td>, ...userDates]}</tr>)
+  return rows;
+}
 
 export default function Event() {
   const e = useLoaderData();
@@ -129,78 +204,10 @@ export default function Event() {
             <figure>
               <table>
                 <thead>
-                  <tr>{renderHeader(user, attendees)}</tr>
+                  <tr>{renderHeader(dates)}</tr>
                 </thead>
                 <tbody>
-                  {dates.map((date) => {
-                    const year = date.getFullYear();
-                    let month = date.getMonth() + 1;
-
-                    let todaysDate = date.getDate();
-                    if( month < 10){
-                      month = "0" + month.toString();
-                    }
-                    if (todaysDate < 10) {
-                      todaysDate = "0" + todaysDate.toString();
-                    }
-
-                    // See if checked
-                    let checked = false;
-                    const dateAttendees = event.dates[`${year}-${month}-${todaysDate}T00:00:00Z`];
-                    if (dateAttendees !== undefined) {
-                      const { email } = user;
-                      for (const a of dateAttendees.attendees) {
-                        console.log("a", a);
-                        if (email === a.email) {
-                          checked = true;
-                        }
-                      }
-                    }
-
-                    return (
-                      <tr key={date}>
-                        <td>
-                          {days[date.getDay()]} {date.getDate()}/{date.getMonth() + 1}/
-                          {date.getFullYear()}
-                        </td>
-                        <td>
-                          <input
-                            type="checkbox"
-                            value={`${year}-${month}-${todaysDate}T00:00:00.000Z`}
-                            onChange={(e) => {
-                              const checked = e.target.checked
-                              checked
-                                ? 
-                                  add({
-                                    hash: event.hash,
-                                    ...user,
-                                    date: e.target.value,
-                                  }).then((newEvent) => {
-                                    if (newEvent !== false) {
-                                      setEvent(newEvent);
-                                    }
-                                  })
-                                : removeAttendee({
-                                  hash: event.hash,
-                                  ...user,
-                                  date: e.target.value,
-                                }).then((newEvent) => {
-                                  if (newEvent !== false) {
-                                    setEvent(newEvent);
-                                  }
-                                });
-                            }}
-                            checked={checked}
-                          />
-                        </td>
-                        {renderAttendees(
-                          user,
-                          attendees,
-                          event.dates[`${year}-${month}-${todaysDate}T00:00:00Z`]
-                        )}
-                      </tr>
-                    );
-                  })}
+                  {renderAttendeeRows(user, attendees, dates, event, setEvent)}
                 </tbody>
               </table>
             </figure>
