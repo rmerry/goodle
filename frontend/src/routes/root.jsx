@@ -9,12 +9,7 @@ const defaultUser = {
   accountCreated: false,
 };
 
-<<<<<<< HEAD
-const saveUser = (user) => {
-  console.log('user saving:>> ', user);
-=======
 export const saveUser = (user) => {
->>>>>>> 4a7bc18871671320a78b4d9aa5d01d3f87ba7726
   localStorage.setItem("user", JSON.stringify(user));
   return;
 };
@@ -32,16 +27,12 @@ export async function  createEventAction({ request, params }) {
   console.log('event', event);
   const response = await createEvent(event);
   console.log('response', response)
-<<<<<<< HEAD
-  return redirect(`/event/${response.hash}`);
-=======
   if (response !== undefined) {
     return redirect(`/event/${response.hash}`);
   } else {
     alert("Error creating event");
     return false
   }
->>>>>>> 4a7bc18871671320a78b4d9aa5d01d3f87ba7726
 }
 
 const renderSignup = (name, email, setName, setEmail, saveUser, setAccountCreated) => {
