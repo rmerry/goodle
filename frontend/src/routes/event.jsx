@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
-import {getEvent, addAttendee} from '../actions/event';
+import {getEvent, addAttendee, removeAttendee} from '../actions/event';
 import { loadUser } from "./root";
 
   const days = [
@@ -21,18 +22,11 @@ export async function loader({ params }) {
 }
 
 export async function add(data) {
-  ///v1/event/:hash/attendee
-  const response = await addAttendee(data);
-  if (response !== undefined) {
-    
-  } else {
-    alert("Error Adding Date");
-    return false;
-  }
+  return await addAttendee(data);
 }
 
-export async function removeAttendee() {
-  
+export async function remove(data) {
+  return await removeAttendee(data);
 }
 
 const renderHeader = (user, attendees) => {
@@ -53,11 +47,9 @@ const renderAttendees = (user, allAttendees, dateAttendees ) => {
     if (user.email === email){
       continue;
     }
-    console.log('email', email);
     let found = false;
     if (dateAttendees !== undefined) {
       for (const a of dateAttendees.attendees) {
-        console.log("a", a);
         if (email === a.email) {
           found = true;
         }
@@ -83,12 +75,13 @@ const renderAttendees = (user, allAttendees, dateAttendees ) => {
 };
 
 export default function Event() {
-  const event = useLoaderData();
+  const e = useLoaderData();
+  const [event, setEvent] = useState(e);
   const user = loadUser();
   console.log('event', event);
   const dates = [];
   const today = new Date();
-  const daysToAdd = 10;
+  const daysToAdd = 20;
   for (let i = 0; i < daysToAdd; i++){
     var date = new Date();
     date.setDate(today.getDate() + i);
@@ -128,7 +121,7 @@ export default function Event() {
           {dates.map((date) => {
             const year = date.getFullYear();
             let month = date.getMonth() + 1;
-            const day = date.getDay();
+
             let todaysDate = date.getDate();
             if( month < 10){
               month = "0" + month.toString();
@@ -161,13 +154,29 @@ export default function Event() {
                     type="checkbox"
                     value={`${year}-${month}-${todaysDate}T00:00:00.000Z`}
                     onChange={(e) => {
-                      const result = e.target.checked
-                        ? add({
+                      const checked = e.target.checked
+                      checked
+                        ? 
+                          add({
                             hash: event.hash,
                             ...user,
                             date: e.target.value,
+                          }).then((newEvent) => {
+                            console.log('newEvent :>> ', newEvent);
+                            if (newEvent !== false) {
+                              setEvent(newEvent);
+                            }
                           })
-                        : removeAttendee();
+                        : removeAttendee({
+                          hash: event.hash,
+                          ...user,
+                          date: e.target.value,
+                        }).then((newEvent) => {
+                          console.log('newEvent :>> ', newEvent);
+                          if (newEvent !== false) {
+                            setEvent(newEvent);
+                          }
+                        });
                     }}
                     checked={checked}
                   />
