@@ -2,6 +2,7 @@ import { Link, useLoaderData } from "react-router-dom";
 import {getEvent} from '../actions/event';
 
 export async function loader({ params }) {
+  console.log('params :>> ', params);
   const event = getEvent(params.eventId);
   console.log('loader event', event);
   return event;
