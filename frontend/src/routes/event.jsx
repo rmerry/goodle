@@ -185,7 +185,7 @@ export default function Event() {
   console.log('event', event);
   const dates = [];
   const today = new Date();
-  const daysToAdd = 20;
+  const daysToAdd = 45;
   for (let i = 0; i < daysToAdd; i++){
     var date = new Date();
     date.setDate(today.getDate() + i);
