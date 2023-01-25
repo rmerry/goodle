@@ -18,6 +18,9 @@ func (app *application) routes() http.Handler {
 	// Users
 	router.HandlerFunc(http.MethodPost, "/v1/user", app.createUserHandler)
 
+	// Healthcheck
+	router.HandlerFunc(http.MethodGet, "/v1/healthcheck", app.healthCheckHandler)
+
 	// Apply the middleware
 	return app.enableCORS(router)
 }

@@ -1,0 +1,27 @@
+[Unit]
+# Description is a human-readable name for the service. 
+Description=Goodle API service
+
+After=network-online.target 
+Wants=network-online.target
+
+# Configure service start rate limiting.
+StartLimitIntervalSec=600
+StartLimitBurst=5
+
+[Service]
+# Execute the API binary 
+Type=exec
+User=root
+Group=root
+# EnvironmentFile=/etc/environment # Uncomment if we use environment variables
+WorkingDirectory=/root/Goodle/service
+ExecStart=/root/Goodle/service/goodle-linux-amd64 
+
+# Automatically restart the service after a 5-second wait if it exits with a non-zero
+Restart=on-failure
+RestartSec=5
+
+[Install]
+# Start the service automatically at boot time (the 'multi-user.target' describes a boot # state when the system will accept logins).
+WantedBy=multi-user.target
