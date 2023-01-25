@@ -1,13 +1,11 @@
 package main
 
 import (
-	"encoding/gob"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 	"strings"
 
 	"github.com/julienschmidt/httprouter"
@@ -15,10 +13,6 @@ import (
 
 // An envelope type to send back the JSON responses
 type envelope map[string]interface{}
-
-// Filenames for the storage of data
-const FILE_USERS string = "users.gob"
-const FILE_EVENTS string = "events.gob"
 
 func (app *application) readJSON(w http.ResponseWriter, r *http.Request, dst interface{}) error {
 	// Set the max request size to be 1MB
@@ -123,51 +117,4 @@ func (app *application) readHashParam(r *http.Request) (string, error) {
 	}
 
 	return hash, nil
-}
-
-// Stores the system data to file
-func (app *application) saveData(data interface{}, filename string) error {
-	file, err := os.Create(filename)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	encoder := gob.NewEncoder(file)
-	err = encoder.Encode(data)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (app *application) loadData() error {
-	file, err := os.OpenFile(FILE_EVENTS, os.O_RDWR|os.O_CREATE, 0666)
-	if err != nil {
-		return err
-	}
-
-	defer file.Close()
-
-	decoder := gob.NewDecoder(file)
-	err = decoder.Decode(&app.EventsByHash)
-	if err != nil && err != io.EOF {
-		return err
-	}
-
-	file, err = os.OpenFile(FILE_USERS, os.O_RDWR|os.O_CREATE, 0666)
-	if err != nil {
-		return err
-	}
-
-	defer file.Close()
-
-	decoder = gob.NewDecoder(file)
-	err = decoder.Decode(&app.UsersByEmail)
-	if err != nil && err != io.EOF {
-		return err
-	}
-
-	return nil
 }

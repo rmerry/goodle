@@ -1,6 +1,10 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/mpgelliston/goodle/models"
+)
 
 func (app *application) createUserHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
@@ -14,15 +18,12 @@ func (app *application) createUserHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	user := &User{
+	user := &models.User{
 		Name:  input.Name,
 		Email: input.Email,
 	}
 
-	app.UsersByEmail[user.Email] = user
-
-	err = app.saveData(app.UsersByEmail, FILE_USERS)
-	if err != nil {
+	if err = app.storage.AddUser(user); err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
 	}
