@@ -2,3 +2,4 @@
 *.gob
 node_modules/
 bin/
+frontend/build/
