@@ -11,7 +11,11 @@ production_deployment_path = ~/Goodle/service
 development_build_output = ./bin/goodle
 
 run:
-	go run .
+	cd ${backend_dir} && go run .
+
+run/frontend:
+	cd ${frontend_dir} && npm start
+
 
 build/api:
 	cd ${backend_dir} && go build -ldflags='-s' -o=${development_build_output} .
