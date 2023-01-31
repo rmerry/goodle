@@ -43,6 +43,7 @@ function App() {
   // Load any stored user
   const user = loadUser();
 
+  const [errors, setErrors] = useState([]);
   const [userName, setUserName] = useState(user.name);
   const [userEmail, setUserEmail] = useState(user.email);
   const [accountCreated, ] = useState(user.accountCreated);
@@ -64,9 +65,43 @@ function App() {
       <main className="container">
         <section id="createEvent">
           <h2>Create an Event</h2>
-          <Form method="post">
+          <Form
+            method="post"
+            onSubmit={(e) => {
+              const formErrors = [];
+              if (
+                (!accountCreated &&
+                userName.length === 0 &&
+                userEmail.length === 0)
+              ) {
+                formErrors.push("Please enter your user details");
+              }
+              if (title.length < 1) {
+                formErrors.push("Please give your event a title");
+              }
+
+              if (formErrors.length > 0){
+                setErrors(formErrors);
+                e.preventDefault();
+                return false;
+              } 
+              return true;
+            }}
+          >
             {!accountCreated ? (
               <>
+                {errors.length > 0 ? (
+                  <div>
+                    <h3>Unable to continue...</h3>
+                    <ul>
+                      {errors.map((e, idx) => {
+                        return (
+                          <li key={idx}>{e}</li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                ) : null}
                 <label className="block">
                   <span className="text-gray-700">Name:</span>
                   <input
@@ -108,7 +143,7 @@ function App() {
               </>
             ) : null}
             <label className="block">
-              <span className="text-gray-700">Name:</span>
+              <span className="text-gray-700">Event Title:</span>
               <input
                 type="text"
                 name="title"
