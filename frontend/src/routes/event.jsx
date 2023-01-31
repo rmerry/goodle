@@ -4,7 +4,7 @@ import {getEvent, addAttendee, removeAttendee} from '../actions/event';
 import Signup from "../components/signup";
 import { loadUser } from "./root";
 
-// TODO Could add the event hash of the user to the localstorage so that it is semi-persistent
+// TODO Could add the event hash of the user to the localStorage so that it is semi-persistent
 
   const days = [
     "Sun",
