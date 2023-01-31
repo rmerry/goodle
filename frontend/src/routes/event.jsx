@@ -165,7 +165,7 @@ const renderAttendeeRows = (user, allAttendees, dates, event, setEvent, setModal
         <td>Me</td>
         <td colspan="3">
           <button
-            class="contrast"
+            className="contrast"
             data-target="modal-example"
             onClick={() => setModalOpen(true)}
           >
@@ -257,7 +257,7 @@ export default function Event() {
           <a
             href="#close"
             aria-label="Close"
-            class="close"
+            className="close"
             data-target="modal-example"
             onClick={() => setModalOpen(false)}
           ></a>
