@@ -249,6 +249,25 @@ export default function Event() {
                 )}
               </tbody>
             </table>
+            <div className="grid">
+                  <div></div>
+              {navigator.canShare ? (
+                <a href="#"
+                  role="button"
+                  onClick={() => {
+                    try {
+                      if (navigator.share) {
+                        navigator.share({ title: event.title, url: "" });
+                      }
+                    } catch (err) {
+                      console.error("Share failed:", err.message);
+                    }
+                  }}
+                >
+                  Share
+                </a>
+              ) : null}
+            </div>
           </figure>
         </section>
       </main>
