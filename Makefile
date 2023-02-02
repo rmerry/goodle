@@ -49,12 +49,15 @@ deploy/api:
 	@echo 'Deploying API service to production...'
 	cd ${backend_dir} && rsync -P ${production_build_output} ${production_host_user}@${production_host_ip}:${production_deployment_path}
 	rsync -P ${backend_dir}/remote/production/api.service ${production_host_user}@${production_host_ip}:~
+	rsync -P ${backend_dir}/remote/production/Caddyfile ${production_host_user}@${production_host_ip}:~
 	@echo 'Done!'
 	@echo 'Restarting API Service!'
 	ssh -t ${production_host_user}@${production_host_ip} '\
 		sudo mv ~/api.service /etc/systemd/system/ \
 		&& sudo systemctl enable api \
-		&& sudo systemctl restart api '
+		&& sudo systemctl restart api \
+		&& sudo mv ~/Caddyfile /etc/caddy/ \
+		&& sudo systemctl reload caddy '
 
 deploy/frontend:
 	@echo 'Deploying Frontend to production...'

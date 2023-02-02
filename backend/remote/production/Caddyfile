@@ -1,0 +1,7 @@
+{
+  email matt@e-titans.com
+}
+
+api-goodle.codestar.com {
+  reverse_proxy localhost:4001
+}

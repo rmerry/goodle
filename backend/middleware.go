@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 )
 
@@ -15,6 +16,7 @@ func (app *application) enableCORS(next http.Handler) http.Handler {
 
 		// Get the requests Origin header
 		origin := r.Header.Get("Origin")
+		fmt.Println(origin)
 
 		if origin != "" {
 			// Loop through the trusted origin headers to see if it matches this requests origin

@@ -11,7 +11,7 @@ StartLimitBurst=5
 
 [Service]
 # Execute the API binary 
-Type=exec
+Type=simple
 User=root
 Group=root
 # EnvironmentFile=/etc/environment # Uncomment if we use environment variables
