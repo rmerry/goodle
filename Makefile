@@ -9,6 +9,7 @@ production_host_user = root
 production_build_output = ./bin/goodle-linux-amd64
 production_deployment_path = ~/Goodle/service
 development_build_output = ./bin/goodle
+cloudfront_distribution_id = E27JP96H9P2ND6
 
 run:
 	cd ${backend_dir} && go run .
@@ -23,6 +24,7 @@ build/api:
 
 build/frontend:
 	cd ${frontend_dir} && npm run-script build
+#	aws cloudfront create-invalidation --distribution-id ${cloudfront_distribution_id} --paths '/*'
 
 audit:
 	@echo 'Tidying and verifying module dependencies...'
