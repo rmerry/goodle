@@ -21,7 +21,7 @@ type application struct {
 func main() {
 	var cfg config
 	// TODO Add the cors domains as parameters when booting up the instance
-	cfg.cors.trustedOrigins = []string{"http://localhost:3000", "http://goodle.codestar.com.s3-website-eu-west-1.amazonaws.com", "http://goodle.codestar.com"}
+	cfg.cors.trustedOrigins = []string{"http://localhost:3000", "http://goodle.codestar.com.s3-website-eu-west-1.amazonaws.com", "http://goodle.codestar.com", "https://goodle.codestar.com"}
 
 	flag.IntVar(&cfg.port, "port", 4001, "API server port to listen on")
 
