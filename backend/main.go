@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"log"
+
+	"github.com/mpgelliston/goodle/storage"
 )
 
 type config struct {
@@ -13,9 +15,8 @@ type config struct {
 }
 
 type application struct {
-	config       config
-	EventsByHash map[string]*Event
-	UsersByEmail map[string]*User
+	config  config
+	storage storage.Storage
 }
 
 func main() {
@@ -24,16 +25,17 @@ func main() {
 	cfg.cors.trustedOrigins = []string{"http://localhost:3000", "http://goodle.codestar.com.s3-website-eu-west-1.amazonaws.com", "http://goodle.codestar.com", "https://goodle.codestar.com"}
 
 	flag.IntVar(&cfg.port, "port", 4001, "API server port to listen on")
+	// flag.StringVar(&cfg., "port", 4001, "API server port to listen on")
 
-	app := &application{
-		config:       cfg,
-		EventsByHash: make(map[string]*Event),
-		UsersByEmail: make(map[string]*User),
+	var s storage.Storage
+	s, err := storage.NewLocalStorage()
+	if err != nil {
+		panic(err)
 	}
 
-	err := app.loadData()
-	if err != nil {
-		log.Fatal(err)
+	app := &application{
+		config:  cfg,
+		storage: s,
 	}
 
 	err = app.serve()
