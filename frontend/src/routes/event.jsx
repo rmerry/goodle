@@ -53,7 +53,7 @@ const renderHeader = (dates, eventDates) => {
     const dateAttendees = eventDates[theDateServerFmt];
 
     return (
-      <th>
+      <th key={`th-${date}`}>
         <div key={date} className="header-option">
           <div>
             <div className="header-option-month">{months[date.getMonth()]}</div>
@@ -83,8 +83,9 @@ const renderHeader = (dates, eventDates) => {
       </th>
     );
   });
+
   return [
-    <th className="sticky inset-0 bg-white">
+    <th key="static-th" className="sticky inset-0 bg-white">
       <div className="mr-1 mb-1 flex h-48 items-end justify-start px-2 md:w-48">
         <h2 className="text-base font-semibold text-grey-900 md:text-lg">
           Participants
@@ -147,6 +148,7 @@ const renderAttendeeRows = (
       } else {
         return (
           <td
+          key={`empty-${date}`}
             className={dayOfWeek === 6 || dayOfWeek === 0 ? "weekend" : null}
           ></td>
         );
@@ -328,14 +330,14 @@ export default function Event() {
 
   return (
     <>
-      <div class="m-4 text-center">
+      <div className="m-4 text-center">
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9352512270307393"
-          crossorigin="anonymous"
+          crossOrigin="anonymous"
         ></script>
         <ins
-          class="adsbygoogle"
+          className="adsbygoogle"
           style={{ display: "block" }}
           data-ad-client="ca-pub-9352512270307393"
           data-ad-slot="6502745854"
@@ -456,14 +458,14 @@ export default function Event() {
           </div>
         </div>
       </section>
-      <div class="m-4 text-center">
+      <div className="m-4 text-center">
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9352512270307393"
-          crossorigin="anonymous"
+          crossOrigin="anonymous"
         ></script>
         <ins
-          class="adsbygoogle"
+          className="adsbygoogle"
           style={{ display: "block" }}
           data-ad-client="ca-pub-9352512270307393"
           data-ad-slot="2608319607"
