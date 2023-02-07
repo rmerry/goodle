@@ -24,7 +24,6 @@ const months = [
 
 export async function loader({ params }) {
   const event = getEvent(params.eventId);
-  console.log("loader event", event);
   return event;
 }
 
@@ -36,9 +35,23 @@ export async function remove(data) {
   return await removeAttendee(data);
 }
 
-const renderHeader = (dates) => {
+const renderHeader = (dates, eventDates) => {
   const headers = dates.map((date) => {
-    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    if (month < 10) {
+      month = "0" + month.toString();
+    }
+
+    let theDate = date.getDate();
+    if (theDate < 10) {
+      theDate = "0" + theDate.toString();
+    }
+
+
+    const theDateServerFmt = `${year}-${month}-${theDate}T00:00:00Z`;
+    const dateAttendees = eventDates[theDateServerFmt];
+
     return (
       <th>
         <div key={date} className="header-option">
@@ -47,6 +60,7 @@ const renderHeader = (dates) => {
             <div className="header-option-day">{date.getDate()}</div>
             <div className="header-option-dotw">{days[date.getDay()]}</div>
           </div>
+          {dateAttendees !== undefined ? (
           <div className="header-option-participants">
             <div>
               <svg
@@ -62,8 +76,9 @@ const renderHeader = (dates) => {
                 />
               </svg>
             </div>
-            <div className="header-option-participants-counter">2</div>
+            <div className="header-option-participants-counter">{dateAttendees.attendees.length}</div>
           </div>
+          ) : null}
         </div>
       </th>
     );
@@ -89,7 +104,6 @@ const renderAttendeeRows = (
   setModalOpen
 ) => {
   const rows = [];
-  console.log("user", user);
   for (const [email, attendee] of Object.entries(allAttendees)) {
     if (user.email === email) {
       continue; // Skip the user so we can render their row at the end
@@ -120,7 +134,7 @@ const renderAttendeeRows = (
           }
         }
       }
-      console.log("dayOfWeek", dayOfWeek);
+
       if (found) {
         return (
           <td
@@ -290,7 +304,7 @@ export default function Event() {
   const e = useLoaderData();
   const [event, setEvent] = useState(e);
   const user = loadUser();
-  console.log("event", event);
+
   const dates = [];
   const today = new Date();
   const daysToAdd = 45;
@@ -311,8 +325,6 @@ export default function Event() {
       }
     }
   }
-
-  console.log("attendees", attendees);
 
   return (
     <>
@@ -346,7 +358,22 @@ export default function Event() {
                   </div>
                 </div>
                 <div className="mt-6 flex w-full items-center md:mt-0 md:w-1/3 md:justify-end">
-                  <a className="icon-button" href="#">
+                  <button 
+                    className="icon-button" 
+                    href="#" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      try {
+                        if (navigator.share) {
+                          navigator.share({ title: "Select your availability...", text: event.title, url: window.location.href })
+                          .then(() => console.log('Successful share'))
+                          .catch((error) => console.log('Error sharing', error));
+                        }
+                      } catch (err) {
+                        console.error("Share failed:", err.message);
+                      }
+                    }}
+                  >
                     <svg
                       width="24"
                       height="24"
@@ -360,7 +387,7 @@ export default function Event() {
                       />
                     </svg>
                     Share Invite
-                  </a>
+                  </button>
                 </div>
               </div>
               <div className="meta">
@@ -411,7 +438,7 @@ export default function Event() {
               <div className="overflow-x-auto rounded-md border border-grey-100 bg-white pt-1">
                 <table>
                   <thead>
-                    <tr>{renderHeader(dates)}</tr>
+                    <tr>{renderHeader(dates, event.dates)}</tr>
                   </thead>
                   <tbody>
                     {renderAttendeeRows(
