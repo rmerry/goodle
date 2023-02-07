@@ -61,7 +61,7 @@ const Signup = ({ name, email, accountCreated, callback }) => {
               aria-label="Close"
               className="close"
               data-target="modal-example"
-              onClick={() => setModalOpen(false)}
+              onClick={() => callback()}
               class="flex w-full flex-wrap justify-center rounded-md border border-grey-200 bg-white px-4 py-2.5 text-base font-medium text-grey-500 hover:border-grey-300 hover:text-grey-600"
             >
               Cancel
