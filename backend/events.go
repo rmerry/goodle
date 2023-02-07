@@ -43,7 +43,6 @@ func (app *application) getEventHandler(w http.ResponseWriter, r *http.Request) 
 		app.notFoundResponse(w, r)
 		return
 	}
-
 	if len(hash) < models.EVENT_HASH_LENGTH {
 		app.notFoundResponse(w, r)
 		return
@@ -57,13 +56,10 @@ func (app *application) getEventHandler(w http.ResponseWriter, r *http.Request) 
 	} else if event == nil { // 404 Not Found
 		app.notFoundResponse(w, r)
 	}
-
 	err = app.writeJSON(w, http.StatusOK, envelope{"event": event}, nil)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
-
-	return
 }
 
 func (app *application) createAttendeeHandler(w http.ResponseWriter, r *http.Request) {
@@ -113,6 +109,11 @@ func (app *application) createAttendeeHandler(w http.ResponseWriter, r *http.Req
 				eventDate.Attendees = append(eventDate.Attendees, user)
 				event.Dates[input.Date] = eventDate
 			}
+		} else {
+			// New date added so lets start with this
+			event.Dates[input.Date] = models.EventDate{
+				Attendees: []models.User{user},
+			}
 		}
 	}
 
@@ -127,7 +128,6 @@ func (app *application) createAttendeeHandler(w http.ResponseWriter, r *http.Req
 		app.serverErrorResponse(w, r, err)
 		return
 	}
-	return
 }
 
 // Remove a User from attendence
