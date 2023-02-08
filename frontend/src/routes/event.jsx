@@ -60,7 +60,6 @@ const renderHeader = (dates, eventDates) => {
       theDate = "0" + theDate.toString();
     }
 
-
     const theDateServerFmt = `${year}-${month}-${theDate}T00:00:00Z`;
     const dateAttendees = eventDates[theDateServerFmt];
 
@@ -72,7 +71,6 @@ const renderHeader = (dates, eventDates) => {
             <div className="header-option-day">{date.getDate()}</div>
             <div className="header-option-dotw">{days[date.getDay()]}</div>
           </div>
-          {dateAttendees !== undefined ? (
           <div className="header-option-participants">
             <div>
               <svg
@@ -88,9 +86,10 @@ const renderHeader = (dates, eventDates) => {
                 />
               </svg>
             </div>
-            <div className="header-option-participants-counter">{dateAttendees.attendees.length}</div>
+            <div className="header-option-participants-counter">
+              {dateAttendees !== undefined ? dateAttendees.attendees.length : 0}
+            </div>
           </div>
-          ) : null}
         </div>
       </th>
     );
@@ -98,8 +97,8 @@ const renderHeader = (dates, eventDates) => {
 
   return [
     <th key="static-th" className="sticky inset-0 bg-white">
-      <div className="mr-1 mb-1 flex h-48 items-end justify-start px-2 md:w-48">
-        <h2 className="text-base font-semibold text-grey-900 md:text-lg">
+      <div className="mr-1 mb-1 flex h-40 items-end justify-start px-2 md:h-48 md:w-48">
+        <h2 className="hidden text-sm font-semibold text-grey-900 md:block md:text-lg">
           Participants
         </h2>
       </div>
@@ -154,15 +153,43 @@ const renderAttendeeRows = (
             key={`${name}-${date}`}
             className={dayOfWeek === 6 || dayOfWeek === 0 ? "weekend" : null}
           >
-            <img src="/icons/checkmark-64.png" alt="tick" width="32" />
+            <div className="user-selection available">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M18.7099 7.21C18.617 7.11627 18.5064 7.04188 18.3845 6.99111C18.2627 6.94034 18.132 6.9142 17.9999 6.9142C17.8679 6.9142 17.7372 6.94034 17.6154 6.99111C17.4935 7.04188 17.3829 7.11627 17.29 7.21L9.83995 14.67L6.70995 11.53C6.61343 11.4368 6.49949 11.3634 6.37463 11.3142C6.24978 11.265 6.11645 11.2409 5.98227 11.2432C5.84809 11.2456 5.71568 11.2743 5.5926 11.3278C5.46953 11.3813 5.35819 11.4585 5.26495 11.555C5.17171 11.6515 5.0984 11.7655 5.04919 11.8903C4.99999 12.0152 4.97586 12.1485 4.97818 12.2827C4.9805 12.4169 5.00923 12.5493 5.06272 12.6723C5.11622 12.7954 5.19343 12.9068 5.28995 13L9.12995 16.84C9.22291 16.9337 9.33351 17.0081 9.45537 17.0589C9.57723 17.1097 9.70794 17.1358 9.83995 17.1358C9.97196 17.1358 10.1027 17.1097 10.2245 17.0589C10.3464 17.0081 10.457 16.9337 10.55 16.84L18.7099 8.68C18.8115 8.58636 18.8925 8.4727 18.9479 8.3462C19.0033 8.21971 19.0319 8.0831 19.0319 7.945C19.0319 7.8069 19.0033 7.67029 18.9479 7.54379C18.8925 7.41729 18.8115 7.30364 18.7099 7.21Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
           </td>
         );
       } else {
         return (
           <td
-          key={`empty-${date}`}
+            key={`empty-${date}`}
             className={dayOfWeek === 6 || dayOfWeek === 0 ? "weekend" : null}
-          ></td>
+          >
+            <div className="user-selection not-available">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M13.4099 11.9999L17.7099 7.70994C17.8982 7.52164 18.004 7.26624 18.004 6.99994C18.004 6.73364 17.8982 6.47825 17.7099 6.28994C17.5216 6.10164 17.2662 5.99585 16.9999 5.99585C16.7336 5.99585 16.4782 6.10164 16.2899 6.28994L11.9999 10.5899L7.70994 6.28994C7.52164 6.10164 7.26624 5.99585 6.99994 5.99585C6.73364 5.99585 6.47824 6.10164 6.28994 6.28994C6.10164 6.47825 5.99585 6.73364 5.99585 6.99994C5.99585 7.26624 6.10164 7.52164 6.28994 7.70994L10.5899 11.9999L6.28994 16.2899C6.19621 16.3829 6.12182 16.4935 6.07105 16.6154C6.02028 16.7372 5.99414 16.8679 5.99414 16.9999C5.99414 17.132 6.02028 17.2627 6.07105 17.3845C6.12182 17.5064 6.19621 17.617 6.28994 17.7099C6.3829 17.8037 6.4935 17.8781 6.61536 17.9288C6.73722 17.9796 6.86793 18.0057 6.99994 18.0057C7.13195 18.0057 7.26266 17.9796 7.38452 17.9288C7.50638 17.8781 7.61698 17.8037 7.70994 17.7099L11.9999 13.4099L16.2899 17.7099C16.3829 17.8037 16.4935 17.8781 16.6154 17.9288C16.7372 17.9796 16.8679 18.0057 16.9999 18.0057C17.132 18.0057 17.2627 17.9796 17.3845 17.9288C17.5064 17.8781 17.617 17.8037 17.7099 17.7099C17.8037 17.617 17.8781 17.5064 17.9288 17.3845C17.9796 17.2627 18.0057 17.132 18.0057 16.9999C18.0057 16.8679 17.9796 16.7372 17.9288 16.6154C17.8781 16.4935 17.8037 16.3829 17.7099 16.2899L13.4099 11.9999Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </td>
         );
       }
     });
@@ -214,7 +241,7 @@ const renderAttendeeRows = (
           key={`${user.email}-${date}`}
           className={dayOfWeek === 6 || dayOfWeek === 0 ? "weekend" : null}
         >
-          <div className="user-option">
+          <div className={checked ? "user-option checked" : "user-option"}>
             <div className="flex">
               <input
                 type="checkbox"
@@ -359,7 +386,7 @@ export default function Event() {
         <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
       </div>
       <section>
-        <div className="mx-auto max-w-6xl px-4">
+        <div className="mx-auto max-w-6xl px-2 md:px-4">
           <div className="card">
             <div className="w-full">
               <div className="flex flex-wrap items-start justify-between">
@@ -371,10 +398,10 @@ export default function Event() {
                     <p>{event.description}</p>
                   </div>
                 </div>
-                <div className="mt-6 flex w-full items-center md:mt-0 md:w-1/3 md:justify-end">
-                  <button 
-                    className="icon-button" 
-                    href="#" 
+                <div className="mt-4 flex w-full items-center md:mt-0 md:w-1/3 md:justify-end">
+                  <button
+                    className="icon-button"
+                    href="#"
                     onClick={(e) => {
                       e.preventDefault();
                       share("Select your availability...", event.title, window.location.href);
@@ -449,7 +476,7 @@ export default function Event() {
                 </div>
               </div>
             </div>
-            <div className="mt-6 w-full">
+            <div className="mt-4 w-full md:mt-6">
               <div className="overflow-x-auto rounded-md border border-grey-100 bg-white pt-1">
                 <table>
                   <thead>

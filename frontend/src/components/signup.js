@@ -5,7 +5,7 @@ import { saveUser } from "../actions/user";
 const Signup = ({ name, email, accountCreated, callback }) => {
   const [userName, setUserName] = useState(name);
   const [userEmail, setUserEmail] = useState(email);
-  const [_, setUserAccountCreated] = useState(accountCreated);
+  const [setUserAccountCreated] = useState(accountCreated);
 
   console.log("name.length :>> ", name.length);
   const emptyName = userName.length > 0 ? false : true;
@@ -14,7 +14,9 @@ const Signup = ({ name, email, accountCreated, callback }) => {
   return (
     <div className="m-auto w-full max-w-lg rounded-md bg-white p-8">
       <div className="mb-6 text-center">
-        <h3 className="mb-4 text-2xl font-bold md:text-3xl">Join our community</h3>
+        <h3 className="mb-4 text-2xl font-bold md:text-3xl">
+          Join our community
+        </h3>
         <p className="text-lg font-medium text-grey-500">
           It's going to be Gooood-le.
         </p>
