@@ -900,8 +900,8 @@ body {
   border-radius: 9999px;
   --tw-bg-opacity: 1;
   background-color: rgb(238 240 243 / var(--tw-bg-opacity));
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
   font-weight: 500;
   --tw-text-opacity: 1;
   color: rgb(136 150 171 / var(--tw-text-opacity));

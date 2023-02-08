@@ -40,12 +40,12 @@ const share = async (text, title, url) => {
     await navigator.share({
       title,
       text,
-      url
-    })
+      url,
+    });
   } catch (error) {
-    console.log('Sharing failed!', error)
+    console.log("Sharing failed!", error);
   }
-}
+};
 
 const renderHeader = (dates, eventDates) => {
   const headers = dates.map((date) => {
@@ -308,7 +308,7 @@ const renderAttendeeRows = (
       <tr key="Signup-row" className="user-row relative">
         <th className="sticky inset-0 bg-white px-2">
           <div className="flex items-center">
-            <div className="user-avatar">M</div>
+            <div className="user-avatar">ME</div>
             <div className="user-name">Me</div>
           </div>
         </th>
@@ -317,7 +317,7 @@ const renderAttendeeRows = (
             <button
               data-target="modal-signup"
               onClick={() => setModalOpen(true)}
-              className="icon-button sm inline"
+              className="icon-button sm"
             >
               <svg
                 width="24"
@@ -406,7 +406,11 @@ export default function Event() {
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();
-                      share("Select your availability...", event.title, window.location.href);
+                      share(
+                        "Select your availability...",
+                        event.title,
+                        window.location.href
+                      );
                       // try {
                       //   if (navigator.canShare()) {
                       //     navigator.share({ title: "Select your availability...", text: event.title, url: window.location.href })
