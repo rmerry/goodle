@@ -22,6 +22,7 @@ type Event struct {
 	Title       string                  `json:"title"`
 	Description string                  `json:"description"`
 	Dates       map[time.Time]EventDate `json:"dates"`
+	Owner       User                    `json:"owner"`
 }
 
 func NewEvent() *Event {

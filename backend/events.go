@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -9,8 +10,9 @@ import (
 
 func (app *application) createEventHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
-		Title       string `json:"title"`
-		Description string `json:"description"`
+		Title       string      `json:"title"`
+		Description string      `json:"description"`
+		Owner       models.User `json:"owner"`
 	}
 
 	err := app.readJSON(w, r, &input)
@@ -18,11 +20,13 @@ func (app *application) createEventHandler(w http.ResponseWriter, r *http.Reques
 		app.badRequestResponse(w, r, err)
 		return
 	}
+	fmt.Printf("\nInput: %+v", input)
 
 	event := models.NewEvent()
 	event.Title = input.Title
 	event.Description = input.Description
 	event.Dates = make(map[time.Time]models.EventDate)
+	event.Owner = input.Owner
 
 	if err = app.storage.AddEvent(event); err != nil {
 		app.serverErrorResponse(w, r, err)
