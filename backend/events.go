@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
@@ -20,7 +19,6 @@ func (app *application) createEventHandler(w http.ResponseWriter, r *http.Reques
 		app.badRequestResponse(w, r, err)
 		return
 	}
-	fmt.Printf("\nInput: %+v", input)
 
 	event := models.NewEvent()
 	event.Title = input.Title
