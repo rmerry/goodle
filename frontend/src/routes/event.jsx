@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { getEvent, addAttendee, removeAttendee } from "../actions/event";
 import Signup from "../components/signup";
 import { loadUser } from "./root";
+import { avatarInitials } from '../helper/avatar';
 
 // TODO Could add the event hash of the user to the localStorage so that it is semi-persistent
 
@@ -199,7 +200,7 @@ const renderAttendeeRows = (
         {[
           <th key={attendee} className="sticky inset-0 bg-white px-2">
             <div className="flex items-center">
-              <div className="user-avatar">M</div>
+              <div className="user-avatar">{avatarInitials(name)}</div>
               <div className="user-name">{name}</div>
             </div>
           </th>,
@@ -294,7 +295,7 @@ const renderAttendeeRows = (
         {[
           <th key={user} className="sticky inset-0 bg-white px-2">
             <div className="flex items-center">
-              <div className="user-avatar">M</div>
+              <div className="user-avatar">{avatarInitials(user.name)}</div>
               <div className="user-name">{user.name}</div>
             </div>
           </th>,

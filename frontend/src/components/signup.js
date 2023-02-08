@@ -5,7 +5,7 @@ import { saveUser } from "../actions/user";
 const Signup = ({ name, email, accountCreated, callback }) => {
   const [userName, setUserName] = useState(name);
   const [userEmail, setUserEmail] = useState(email);
-  const [setUserAccountCreated] = useState(accountCreated);
+  const [ ,setUserAccountCreated] = useState(accountCreated);
 
   console.log("name.length :>> ", name.length);
   const emptyName = userName.length > 0 ? false : true;
@@ -61,10 +61,9 @@ const Signup = ({ name, email, accountCreated, callback }) => {
             <a
               href="#close"
               aria-label="Close"
-              className="close"
               data-target="modal-example"
               onClick={() => callback()}
-              className="flex w-full flex-wrap justify-center rounded-md border border-grey-200 bg-white px-4 py-2.5 text-base font-medium text-grey-500 hover:border-grey-300 hover:text-grey-600"
+              className="close flex w-full flex-wrap justify-center rounded-md border border-grey-200 bg-white px-4 py-2.5 text-base font-medium text-grey-500 hover:border-grey-300 hover:text-grey-600"
             >
               Cancel
             </a>
