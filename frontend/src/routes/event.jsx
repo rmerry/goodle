@@ -35,6 +35,18 @@ export async function remove(data) {
   return await removeAttendee(data);
 }
 
+const share = async (text, title, url) => {
+  try {
+    await navigator.share({
+      title,
+      text,
+      url
+    })
+  } catch (error) {
+    console.log('Sharing failed!', error)
+  }
+}
+
 const renderHeader = (dates, eventDates) => {
   const headers = dates.map((date) => {
     const year = date.getFullYear();
@@ -365,15 +377,16 @@ export default function Event() {
                     href="#" 
                     onClick={(e) => {
                       e.preventDefault();
-                      try {
-                        if (navigator.share) {
-                          navigator.share({ title: "Select your availability...", text: event.title, url: window.location.href })
-                          .then(() => console.log('Successful share'))
-                          .catch((error) => console.log('Error sharing', error));
-                        }
-                      } catch (err) {
-                        console.error("Share failed:", err.message);
-                      }
+                      share("Select your availability...", event.title, window.location.href);
+                      // try {
+                      //   if (navigator.canShare()) {
+                      //     navigator.share({ title: "Select your availability...", text: event.title, url: window.location.href })
+                      //     .then(() => console.log('Successful share'))
+                      //     .catch((error) => console.log('Error sharing', error));
+                      //   }
+                      // } catch (err) {
+                      //   console.error("Share failed:", err.message);
+                      // }
                     }}
                   >
                     <svg
