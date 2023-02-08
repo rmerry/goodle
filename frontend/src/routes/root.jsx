@@ -27,8 +27,11 @@ export async function  createEventAction({ request, params }) {
     delete data['name'];
     delete data['email'];
   }
+
+  const user = loadUser();
+  const {name, email} = user;
   // TODO Refactor this out perhaps to two actions at a later date.
-  const event = {...data};
+  const event = {...data, owner: {name, email}};
   const response = await createEvent(event);
 
   if (response !== undefined) {
