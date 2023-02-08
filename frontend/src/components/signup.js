@@ -56,7 +56,7 @@ const Signup = ({ name, email, accountCreated, callback }) => {
             className="block w-full appearance-none rounded-lg border border-grey-200 p-3 leading-5 text-grey-900 placeholder-grey-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
           />
         </div>
-        <div className="-m-2 flex flex-wrap justify-end">
+        <div className="-m-2 flex flex-row">
           <div className="w-full p-2 md:w-1/2">
             <a
               href="#close"

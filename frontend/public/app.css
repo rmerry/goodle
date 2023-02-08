@@ -644,9 +644,10 @@ body {
   }
 }
 
-.icon-button.inline {
+.icon-button.sm {
   display: inline-flex;
-  width: auto;
+  height: 2rem;
+  width: 100%;
   align-items: center;
   justify-content: center;
   border-radius: 0.375rem;
@@ -654,53 +655,37 @@ body {
   background-color: rgb(59 130 246 / var(--tw-bg-opacity));
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
   text-align: center;
-  font-size: 1rem;
-  line-height: 1.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
   font-weight: 500;
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
-.icon-button.inline:hover {
+.icon-button.sm:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(53 117 221 / var(--tw-bg-opacity));
 }
 
-.icon-button.inline:focus {
+.icon-button.sm:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
 }
 
-.icon-button.inline:focus-visible {
+.icon-button.sm:focus-visible {
   outline-width: 2px;
   outline-offset: 2px;
   outline-color: #3B82F6;
 }
 
 @media (min-width: 768px) {
-  .icon-button.inline {
-    width: auto;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
-    font-size: 1.125rem;
-    line-height: 1.75rem;
-  }
-}
-
-.icon-button.sm {
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
-
-@media (min-width: 768px) {
   .icon-button.sm {
+    height: 2.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
     font-size: 1rem;
     line-height: 1.5rem;
   }
@@ -708,8 +693,20 @@ body {
 
 .icon-button svg {
   margin-right: 0.25rem;
+  display: none;
+  height: 1.5rem;
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+@media (min-width: 768px) {
+  .icon-button svg {
+    display: block;
+  }
+}
+
+.icon-button.sm svg {
+  height: 1.25rem;
 }
 
 .meta {
@@ -1090,8 +1087,12 @@ body {
   top: 0.125rem;
 }
 
-.m-4 {
-  margin: 1rem;
+.z-20 {
+  z-index: 20;
+}
+
+.m-2 {
+  margin: 0.5rem;
 }
 
 .m-auto {
@@ -1104,10 +1105,6 @@ body {
 
 .-m-1 {
   margin: -0.25rem;
-}
-
-.m-2 {
-  margin: 0.5rem;
 }
 
 .mx-auto {
@@ -1204,6 +1201,10 @@ body {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
+}
+
+.flex-row {
+  flex-direction: row;
 }
 
 .flex-wrap {
