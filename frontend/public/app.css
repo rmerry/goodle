@@ -907,13 +907,8 @@ body {
   color: rgb(136 150 171 / var(--tw-text-opacity));
 }
 
-@media (min-width: 640px) {
-  .user-avatar {
-    margin-right: 0.5rem;
-  }
-}
-
 .user-name {
+  margin-left: 0.5rem;
   display: none;
   font-size: 0.875rem;
   line-height: 1.25rem;
