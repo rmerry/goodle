@@ -242,7 +242,7 @@ const renderAttendeeRows = (
 
       const dateStr = `${year}-${month}-${theDate}`;
       if (loadingSpinner === dateStr) {
-        console.log('Date matched to spinner');
+        console.log("Date matched to spinner");
       }
       return (
         <td
@@ -250,11 +250,10 @@ const renderAttendeeRows = (
           className={dayOfWeek === 6 || dayOfWeek === 0 ? "weekend" : null}
         >
           <label className={checked ? "user-option checked" : "user-option"}>
-            {loadingSpinner !== '' && loadingSpinner === dateStr ? 
-            (
-            <div className="spinner-container">
-              <div className="spinner"></div>
-            </div>
+            {loadingSpinner !== "" && loadingSpinner === dateStr ? (
+              <div className="spinner-container">
+                <div className="spinner"></div>
+              </div>
             ) : (
               <>
                 <input
@@ -269,7 +268,7 @@ const renderAttendeeRows = (
                           ...user,
                           date: e.target.value,
                         }).then((newEvent) => {
-                          setLoadingSpinner('');
+                          setLoadingSpinner("");
                           if (newEvent !== false) {
                             setEvent(newEvent);
                           }
@@ -279,7 +278,7 @@ const renderAttendeeRows = (
                           ...user,
                           date: e.target.value,
                         }).then((newEvent) => {
-                          setLoadingSpinner('');
+                          setLoadingSpinner("");
                           if (newEvent !== false) {
                             setEvent(newEvent);
                           }
@@ -362,7 +361,7 @@ const renderAttendeeRows = (
 
 export default function Event() {
   const [modalOpen, setModalOpen] = useState(false);
-  const [loadingSpinner, setLoadingSpinner] = useState('');
+  const [loadingSpinner, setLoadingSpinner] = useState("");
   const e = useLoaderData();
   const [event, setEvent] = useState(e);
   const user = loadUser();
@@ -474,7 +473,7 @@ export default function Event() {
                       loadingSpinner,
                       setEvent,
                       setModalOpen,
-                      setLoadingSpinner,
+                      setLoadingSpinner
                     )}
                   </tbody>
                 </table>
