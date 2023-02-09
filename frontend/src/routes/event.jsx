@@ -250,7 +250,7 @@ const renderAttendeeRows = (
                   : "spinner-container hidden"
               }
             >
-              <div class="spinner"></div>
+              <div className="spinner"></div>
             </div>
             <input
               type="checkbox"
@@ -321,7 +321,7 @@ const renderAttendeeRows = (
           </div>
         </th>
         <td colspan="2">
-          <div class="mr-1">
+          <div className="mr-1">
             <button
               data-target="modal-signup"
               onClick={() => setModalOpen(true)}
