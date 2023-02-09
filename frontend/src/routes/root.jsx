@@ -190,9 +190,9 @@ function App() {
                   className="w-full rounded-lg border border-grey-200 px-4 py-2.5 text-base font-normal text-grey-900 outline-none focus:border-blue-500"
                 />
               </div>
-              <div class="mb-6">
+              <div className="mb-6">
                 <label
-                  class="mb-2 block font-medium text-grey-800"
+                  className="mb-2 block font-medium text-grey-800"
                   for="description"
                 >
                   Event Description

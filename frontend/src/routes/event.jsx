@@ -315,7 +315,7 @@ const renderAttendeeRows = (
           </div>
         </th>
         <td colspan="2">
-          <div class="mr-1">
+          <div className="mr-1">
             <button
               data-target="modal-signup"
               onClick={() => setModalOpen(true)}
@@ -409,19 +409,10 @@ export default function Event() {
                     onClick={(e) => {
                       e.preventDefault();
                       share(
-                        "Select your availability...",
+                        event.owner.name + " is inviting you to " + event.title,
                         event.title,
                         window.location.href
                       );
-                      // try {
-                      //   if (navigator.canShare()) {
-                      //     navigator.share({ title: "Select your availability...", text: event.title, url: window.location.href })
-                      //     .then(() => console.log('Successful share'))
-                      //     .catch((error) => console.log('Error sharing', error));
-                      //   }
-                      // } catch (err) {
-                      //   console.error("Share failed:", err.message);
-                      // }
                     }}
                   >
                     <svg

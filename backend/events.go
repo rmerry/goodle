@@ -135,6 +135,7 @@ func (app *application) createAttendeeHandler(w http.ResponseWriter, r *http.Req
 // Remove a User from attendence
 func (app *application) deleteAttendeeHandler(w http.ResponseWriter, r *http.Request) {
 	hash, err := app.readHashParam(r)
+
 	if err != nil {
 		app.notFoundResponse(w, r)
 		return
@@ -151,10 +152,9 @@ func (app *application) deleteAttendeeHandler(w http.ResponseWriter, r *http.Req
 	}
 
 	event, err := app.storage.GetEventByHash(hash)
-	if err != nil {
-		// Check to see if the event date already exists if not add
-		if eventDate, ok := event.Dates[input.Date]; ok {
 
+	if err == nil {
+		if eventDate, ok := event.Dates[input.Date]; ok {
 			// Find the users attendence
 			for i, u := range eventDate.Attendees {
 				if input.Email == u.Email {
@@ -175,7 +175,6 @@ func (app *application) deleteAttendeeHandler(w http.ResponseWriter, r *http.Req
 			}
 		}
 	}
-
-	// 404 Not found
-	app.notFoundResponse(w, r)
+	// Get to here there will be an error so should handle this
+	app.serverErrorResponse(w, r, err)
 }
