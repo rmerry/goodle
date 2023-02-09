@@ -11,8 +11,8 @@ func (app *application) routes() http.Handler {
 
 	// Events
 	router.HandlerFunc(http.MethodPost, "/v1/event", app.createEventHandler)
-	router.HandlerFunc(http.MethodPost, "/v1/event/:hash/attendee", app.createAttendeeHandler)
 	router.HandlerFunc(http.MethodDelete, "/v1/event/:hash/attendee", app.deleteAttendeeHandler)
+	router.HandlerFunc(http.MethodPost, "/v1/event/:hash/attendee", app.createAttendeeHandler)
 	router.HandlerFunc(http.MethodGet, "/v1/event/:hash", app.getEventHandler)
 
 	// Users
