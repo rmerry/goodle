@@ -346,6 +346,7 @@ const renderAttendeeRows = (
 export default function Event() {
   const [modalOpen, setModalOpen] = useState(false);
   const e = useLoaderData();
+  console.log('e', e);
   const [event, setEvent] = useState(e);
   const user = loadUser();
 
@@ -362,6 +363,8 @@ export default function Event() {
   const attendees = [];
 
   // Unique list of attendees
+  console.log(event);
+  console.log('event.dates', event.dates);
   for (const [, value] of Object.entries(event.dates)) {
     for (const a of value.attendees) {
       if (!attendees.includes(a.email)) {
