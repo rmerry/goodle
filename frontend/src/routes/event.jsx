@@ -241,9 +241,7 @@ const renderAttendeeRows = (
       }
 
       const dateStr = `${year}-${month}-${theDate}`;
-      if (loadingSpinner === dateStr) {
-        console.log("Date matched to spinner");
-      }
+
       return (
         <td
           key={`${user.email}-${date}`}
