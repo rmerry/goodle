@@ -353,7 +353,6 @@ const renderAttendeeRows = (
 export default function Event() {
   const [modalOpen, setModalOpen] = useState(false);
   const e = useLoaderData();
-  console.log('e', e);
   const [event, setEvent] = useState(e);
   const user = loadUser();
 
@@ -370,8 +369,6 @@ export default function Event() {
   const attendees = [];
 
   // Unique list of attendees
-  console.log(event);
-  console.log('event.dates', event.dates);
   for (const [, value] of Object.entries(event.dates)) {
     for (const a of value.attendees) {
       if (!attendees.includes(a.email)) {
@@ -418,19 +415,10 @@ export default function Event() {
                     onClick={(e) => {
                       e.preventDefault();
                       share(
-                        "Select your availability...",
+                        event.owner.name + " is inviting you to " + event.title,
                         event.title,
                         window.location.href
                       );
-                      // try {
-                      //   if (navigator.canShare()) {
-                      //     navigator.share({ title: "Select your availability...", text: event.title, url: window.location.href })
-                      //     .then(() => console.log('Successful share'))
-                      //     .catch((error) => console.log('Error sharing', error));
-                      //   }
-                      // } catch (err) {
-                      //   console.error("Share failed:", err.message);
-                      // }
                     }}
                   >
                     <svg
