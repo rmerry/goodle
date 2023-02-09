@@ -1011,15 +1011,15 @@ body {
   transition-duration: 200ms;
 }
 
-.user-option:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(245 249 255 / var(--tw-bg-opacity));
-}
-
 @media (min-width: 768px) {
   .user-option {
     height: 2.5rem;
     width: 6rem;
+  }
+
+  .user-option:hover {
+    --tw-bg-opacity: 1;
+    background-color: rgb(245 249 255 / var(--tw-bg-opacity));
   }
 }
 
@@ -1031,8 +1031,6 @@ body {
 .user-option input[type="checkbox"] {
   position: absolute;
   z-index: 10;
-  height: 2rem;
-  width: 2rem;
   opacity: 0;
 }
 
