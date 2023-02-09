@@ -268,7 +268,10 @@ const renderAttendeeRows = (
                           ...user,
                           date: e.target.value,
                         }).then((newEvent) => {
-                          setLoadingSpinner("");
+                          // Reset the spinner
+                          setTimeout(() => {
+                            setLoadingSpinner("");
+                          }, 400);
                           if (newEvent !== false) {
                             setEvent(newEvent);
                           }
@@ -278,7 +281,10 @@ const renderAttendeeRows = (
                           ...user,
                           date: e.target.value,
                         }).then((newEvent) => {
-                          setLoadingSpinner("");
+                          // Reset the spinner
+                          setTimeout(() => {
+                            setLoadingSpinner("");
+                          }, 400);
                           if (newEvent !== false) {
                             setEvent(newEvent);
                           }
