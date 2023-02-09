@@ -3,7 +3,7 @@ import { useLoaderData } from "react-router-dom";
 import { getEvent, addAttendee, removeAttendee } from "../actions/event";
 import Signup from "../components/signup";
 import { loadUser } from "./root";
-import { avatarInitials } from '../helper/avatar';
+import { avatarInitials } from "../helper/avatar";
 
 // TODO Could add the event hash of the user to the localStorage so that it is semi-persistent
 
@@ -97,7 +97,7 @@ const renderHeader = (dates, eventDates) => {
   });
 
   return [
-    <th key="static-th" className="sticky inset-0 bg-white">
+    <th key="static-th" className="sticky inset-0 z-20 bg-white">
       <div className="mr-1 mb-1 flex h-40 items-end justify-start px-2 md:h-48 md:w-48">
         <h2 className="hidden text-sm font-semibold text-grey-900 md:block md:text-lg">
           Participants
@@ -198,7 +198,7 @@ const renderAttendeeRows = (
     rows.push(
       <tr key={email} className="user-row">
         {[
-          <th key={attendee} className="sticky inset-0 bg-white px-2">
+          <th key={attendee} className="sticky inset-0 z-20 bg-white px-2">
             <div className="flex items-center">
               <div className="user-avatar">{avatarInitials(name)}</div>
               <div className="user-name">{name}</div>
@@ -242,58 +242,65 @@ const renderAttendeeRows = (
           key={`${user.email}-${date}`}
           className={dayOfWeek === 6 || dayOfWeek === 0 ? "weekend" : null}
         >
-          <div className={checked ? "user-option checked" : "user-option"}>
-            <div className="flex">
-              <input
-                type="checkbox"
-                value={`${year}-${month}-${theDate}T00:00:00.000Z`}
-                onChange={(e) => {
-                  const checked = e.target.checked;
-                  checked
-                    ? add({
-                        hash: event.hash,
-                        ...user,
-                        date: e.target.value,
-                      }).then((newEvent) => {
-                        if (newEvent !== false) {
-                          setEvent(newEvent);
-                        }
-                      })
-                    : removeAttendee({
-                        hash: event.hash,
-                        ...user,
-                        date: e.target.value,
-                      }).then((newEvent) => {
-                        if (newEvent !== false) {
-                          setEvent(newEvent);
-                        }
-                      });
-                }}
-                checked={checked}
-              />
-              <div className="checkbox">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M18.7099 7.21C18.617 7.11627 18.5064 7.04188 18.3845 6.99111C18.2627 6.94034 18.132 6.9142 17.9999 6.9142C17.8679 6.9142 17.7372 6.94034 17.6154 6.99111C17.4935 7.04188 17.3829 7.11627 17.29 7.21L9.83995 14.67L6.70995 11.53C6.61343 11.4368 6.49949 11.3634 6.37463 11.3142C6.24978 11.265 6.11645 11.2409 5.98227 11.2432C5.84809 11.2456 5.71568 11.2743 5.5926 11.3278C5.46953 11.3813 5.35819 11.4585 5.26495 11.555C5.17171 11.6515 5.0984 11.7655 5.04919 11.8903C4.99999 12.0152 4.97586 12.1485 4.97818 12.2827C4.9805 12.4169 5.00923 12.5493 5.06272 12.6723C5.11622 12.7954 5.19343 12.9068 5.28995 13L9.12995 16.84C9.22291 16.9337 9.33351 17.0081 9.45537 17.0589C9.57723 17.1097 9.70794 17.1358 9.83995 17.1358C9.97196 17.1358 10.1027 17.1097 10.2245 17.0589C10.3464 17.0081 10.457 16.9337 10.55 16.84L18.7099 8.68C18.8115 8.58636 18.8925 8.4727 18.9479 8.3462C19.0033 8.21971 19.0319 8.0831 19.0319 7.945C19.0319 7.8069 19.0033 7.67029 18.9479 7.54379C18.8925 7.41729 18.8115 7.30364 18.7099 7.21Z"
-                    fill="currentColor"
-                  />
-                </svg>
-              </div>
+          <label className={checked ? "user-option checked" : "user-option"}>
+            <div
+              className={
+                checked
+                  ? "spinner-container animate"
+                  : "spinner-container hidden"
+              }
+            >
+              <div class="spinner"></div>
             </div>
-          </div>
+            <input
+              type="checkbox"
+              value={`${year}-${month}-${theDate}T00:00:00.000Z`}
+              onChange={(e) => {
+                const checked = e.target.checked;
+                checked
+                  ? add({
+                      hash: event.hash,
+                      ...user,
+                      date: e.target.value,
+                    }).then((newEvent) => {
+                      if (newEvent !== false) {
+                        setEvent(newEvent);
+                      }
+                    })
+                  : removeAttendee({
+                      hash: event.hash,
+                      ...user,
+                      date: e.target.value,
+                    }).then((newEvent) => {
+                      if (newEvent !== false) {
+                        setEvent(newEvent);
+                      }
+                    });
+              }}
+              checked={checked}
+            />
+            <div className="checkbox">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M18.7099 7.21C18.617 7.11627 18.5064 7.04188 18.3845 6.99111C18.2627 6.94034 18.132 6.9142 17.9999 6.9142C17.8679 6.9142 17.7372 6.94034 17.6154 6.99111C17.4935 7.04188 17.3829 7.11627 17.29 7.21L9.83995 14.67L6.70995 11.53C6.61343 11.4368 6.49949 11.3634 6.37463 11.3142C6.24978 11.265 6.11645 11.2409 5.98227 11.2432C5.84809 11.2456 5.71568 11.2743 5.5926 11.3278C5.46953 11.3813 5.35819 11.4585 5.26495 11.555C5.17171 11.6515 5.0984 11.7655 5.04919 11.8903C4.99999 12.0152 4.97586 12.1485 4.97818 12.2827C4.9805 12.4169 5.00923 12.5493 5.06272 12.6723C5.11622 12.7954 5.19343 12.9068 5.28995 13L9.12995 16.84C9.22291 16.9337 9.33351 17.0081 9.45537 17.0589C9.57723 17.1097 9.70794 17.1358 9.83995 17.1358C9.97196 17.1358 10.1027 17.1097 10.2245 17.0589C10.3464 17.0081 10.457 16.9337 10.55 16.84L18.7099 8.68C18.8115 8.58636 18.8925 8.4727 18.9479 8.3462C19.0033 8.21971 19.0319 8.0831 19.0319 7.945C19.0319 7.8069 19.0033 7.67029 18.9479 7.54379C18.8925 7.41729 18.8115 7.30364 18.7099 7.21Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+          </label>
         </td>
       );
     });
     rows.push(
       <tr key={user.email} className="user-row">
         {[
-          <th key={user} className="sticky inset-0 bg-white px-2">
+          <th key={user} className="sticky inset-0 z-20 bg-white px-2">
             <div className="flex items-center">
               <div className="user-avatar">{avatarInitials(user.name)}</div>
               <div className="user-name">{user.name}</div>
@@ -307,7 +314,7 @@ const renderAttendeeRows = (
     // Show the signup row
     rows.push(
       <tr key="Signup-row" className="user-row relative">
-        <th className="sticky inset-0 bg-white px-2">
+        <th className="sticky inset-0 z-20 bg-white px-2">
           <div className="flex items-center">
             <div className="user-avatar">ME</div>
             <div className="user-name">Me</div>
@@ -444,7 +451,9 @@ export default function Event() {
               </div>
               <div className="meta">
                 <div className="meta-item">
-                  <div className="user-avatar">{avatarInitials(event.owner.name)}</div>
+                  <div className="user-avatar">
+                    {avatarInitials(event.owner.name)}
+                  </div>
                   <div className="meta-text">
                     {event.owner.name} is the event organiser
                   </div>
