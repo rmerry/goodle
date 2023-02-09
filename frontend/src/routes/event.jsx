@@ -243,13 +243,7 @@ const renderAttendeeRows = (
           className={dayOfWeek === 6 || dayOfWeek === 0 ? "weekend" : null}
         >
           <label className={checked ? "user-option checked" : "user-option"}>
-            <div
-              className={
-                checked
-                  ? "spinner-container animate"
-                  : "spinner-container hidden"
-              }
-            >
+            <div class="spinner-container">
               <div class="spinner"></div>
             </div>
             <input
