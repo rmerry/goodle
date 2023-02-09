@@ -250,10 +250,8 @@ const renderAttendeeRows = (
           className={dayOfWeek === 6 || dayOfWeek === 0 ? "weekend" : null}
         >
           <label className={checked ? "user-option checked" : "user-option"}>
-            {loadingSpinner !== "" && loadingSpinner === dateStr ? (
-              <div className="spinner-container">
-                <div className="spinner"></div>
-              </div>
+            {checked && loadingSpinner !== "" && loadingSpinner === dateStr ? (
+              <div className="spinner"></div>
             ) : (
               <>
                 <input
@@ -284,10 +282,10 @@ const renderAttendeeRows = (
                           // Reset the spinner
                           setTimeout(() => {
                             setLoadingSpinner("");
+                            if (newEvent !== false) {
+                              setEvent(newEvent);
+                            }
                           }, 400);
-                          if (newEvent !== false) {
-                            setEvent(newEvent);
-                          }
                         });
                   }}
                   checked={checked}
