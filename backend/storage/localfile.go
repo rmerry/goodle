@@ -19,7 +19,7 @@ type LocalStorage struct {
 }
 
 func (l *LocalStorage) AddEvent(e *models.Event) error {
-	l.events[e.Hash] = e
+	l.events[e.PublicHash] = e
 	err := commit(l.events, FILE_EVENTS)
 	if err != nil {
 		return fmt.Errorf("unable to add event - %s", err.Error())
@@ -76,11 +76,13 @@ func (l *LocalStorage) initialise() error {
 	defer file.Close()
 
 	decoder := gob.NewDecoder(file)
-	m := make(map[string]models.Event)
+	m := make(map[string]*models.Event)
 	err = decoder.Decode(&m)
 	if err != nil && err != io.EOF {
 		return err
 	}
+
+	l.events = m // Added this so that events are in the app and can be retrieved when initialised
 
 	file, err = os.OpenFile(FILE_USERS, os.O_RDWR|os.O_CREATE, 0666)
 	if err != nil {

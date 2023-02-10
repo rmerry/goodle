@@ -9,8 +9,9 @@ import (
 
 func (app *application) createEventHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
-		Title       string `json:"title"`
-		Description string `json:"description"`
+		Title       string      `json:"title"`
+		Description string      `json:"description"`
+		Owner       models.User `json:"owner"`
 	}
 
 	err := app.readJSON(w, r, &input)
@@ -23,6 +24,7 @@ func (app *application) createEventHandler(w http.ResponseWriter, r *http.Reques
 	event.Title = input.Title
 	event.Description = input.Description
 	event.Dates = make(map[time.Time]models.EventDate)
+	event.Owner = input.Owner
 
 	if err = app.storage.AddEvent(event); err != nil {
 		app.serverErrorResponse(w, r, err)
@@ -43,7 +45,6 @@ func (app *application) getEventHandler(w http.ResponseWriter, r *http.Request) 
 		app.notFoundResponse(w, r)
 		return
 	}
-
 	if len(hash) < models.EVENT_HASH_LENGTH {
 		app.notFoundResponse(w, r)
 		return
@@ -57,13 +58,10 @@ func (app *application) getEventHandler(w http.ResponseWriter, r *http.Request) 
 	} else if event == nil { // 404 Not Found
 		app.notFoundResponse(w, r)
 	}
-
 	err = app.writeJSON(w, http.StatusOK, envelope{"event": event}, nil)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 	}
-
-	return
 }
 
 func (app *application) createAttendeeHandler(w http.ResponseWriter, r *http.Request) {
@@ -113,6 +111,11 @@ func (app *application) createAttendeeHandler(w http.ResponseWriter, r *http.Req
 				eventDate.Attendees = append(eventDate.Attendees, user)
 				event.Dates[input.Date] = eventDate
 			}
+		} else {
+			// New date added so lets start with this
+			event.Dates[input.Date] = models.EventDate{
+				Attendees: []models.User{user},
+			}
 		}
 	}
 
@@ -127,12 +130,12 @@ func (app *application) createAttendeeHandler(w http.ResponseWriter, r *http.Req
 		app.serverErrorResponse(w, r, err)
 		return
 	}
-	return
 }
 
 // Remove a User from attendence
 func (app *application) deleteAttendeeHandler(w http.ResponseWriter, r *http.Request) {
 	hash, err := app.readHashParam(r)
+
 	if err != nil {
 		app.notFoundResponse(w, r)
 		return
@@ -149,10 +152,9 @@ func (app *application) deleteAttendeeHandler(w http.ResponseWriter, r *http.Req
 	}
 
 	event, err := app.storage.GetEventByHash(hash)
-	if err != nil {
-		// Check to see if the event date already exists if not add
-		if eventDate, ok := event.Dates[input.Date]; ok {
 
+	if err == nil {
+		if eventDate, ok := event.Dates[input.Date]; ok {
 			// Find the users attendence
 			for i, u := range eventDate.Attendees {
 				if input.Email == u.Email {
@@ -173,7 +175,6 @@ func (app *application) deleteAttendeeHandler(w http.ResponseWriter, r *http.Req
 			}
 		}
 	}
-
-	// 404 Not found
-	app.notFoundResponse(w, r)
+	// Get to here there will be an error so should handle this
+	app.serverErrorResponse(w, r, err)
 }

@@ -18,10 +18,11 @@ type EventDate struct {
 }
 
 type Event struct {
-	Hash        string                  `json:"hash"`
+	PublicHash  string                  `json:"hash"`
 	Title       string                  `json:"title"`
 	Description string                  `json:"description"`
 	Dates       map[time.Time]EventDate `json:"dates"`
+	Owner       User                    `json:"owner"`
 }
 
 func NewEvent() *Event {
@@ -31,6 +32,6 @@ func NewEvent() *Event {
 		hash[i] = letterRunes[rand.Intn(len(letterRunes))]
 	}
 	return &Event{
-		Hash: string(hash),
+		PublicHash: string(hash),
 	}
 }

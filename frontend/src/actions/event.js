@@ -1,7 +1,6 @@
 import { API_URL } from "../constants";
 
 export const getEvent = async (eventId) => {
-  console.log('eventId', eventId);
   return await fetch(`${API_URL}/v1/event/${eventId}`)
     .then((response) => response.json())
     .then((data) => {
@@ -13,7 +12,6 @@ export const getEvent = async (eventId) => {
 };
 
 export const createEvent = async (event) => {
- console.log("event posting", event);
  const requestOptions = {
    method: "POST",
    headers: { "Content-Type": "application/json" },

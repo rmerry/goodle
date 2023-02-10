@@ -3,3 +3,7 @@
 node_modules/
 bin/
 frontend/build/
+
+terraform/.terraform/*
+terraform/*.tfstate
+terraform/*.tfstate.*

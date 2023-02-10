@@ -11,8 +11,13 @@ production_deployment_path = ~/Goodle/service
 development_build_output = ./bin/goodle
 cloudfront_distribution_id = E27JP96H9P2ND6
 
+dynamodb_table_name_dev = eu-west-1-project-x-events
+
 run:
 	cd ${backend_dir} && go run .
+
+run-with-dynamodb:
+	cd ${backend_dir} && go run . -local-storage=false -aws-region=${AWS_REGION} -aws-access-key=${AWS_ACCESS_KEY} -aws-secret-key=${AWS_SECRET_KEY} -dynamodb-table-name=${dynamodb_table_name_dev}
 
 run/frontend:
 	cd ${frontend_dir} && npm start

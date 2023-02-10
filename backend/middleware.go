@@ -16,8 +16,8 @@ func (app *application) enableCORS(next http.Handler) http.Handler {
 
 		// Get the requests Origin header
 		origin := r.Header.Get("Origin")
-		fmt.Println(origin)
-
+		fmt.Println(r.Method)
+		fmt.Println(r.RequestURI)
 		if origin != "" {
 			// Loop through the trusted origin headers to see if it matches this requests origin
 			for i := range app.config.cors.trustedOrigins {
